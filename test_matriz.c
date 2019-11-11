@@ -48,7 +48,7 @@ void imprimirImagem(Imagem img){
     }
 }
 
-
+/*
 int main(){
     Imagem img;
     int altura, largura;
@@ -58,3 +58,4 @@ int main(){
     liberarImagem(&img);
     return 0;
 }
+*/
