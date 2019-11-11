@@ -1,6 +1,7 @@
 #include "arquivo.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 void* AlocarMemoria(int bytes){
     void* ponteiro;
@@ -35,10 +36,18 @@ void fechaArquivo(FILE* arq){
 }
 Comando* lerComando(FILE* arq){
     char texto_str[50];
-    fgets(texto_str, 20, arq);
+    char* result = fgets(texto_str, 50, arq);
+    if (result==NULL) {
+        return NULL;
+    }
+    // so teste
     Comando* com = (Comando*) calloc(1, sizeof(Comando));
+    strcpy(com->comando, "image");
+    com->parametros[0] = 20;
+    com->parametros[1] = 20;
+    com->qntParametros = 2;
 
-     return com;
+    return com;
 }
 typedef struct{
      int r;
@@ -46,11 +55,41 @@ typedef struct{
      int b;
 }Cor;
 typedef struct {
-     int pixels;
+    int x;
+    int y;
+}Ponto;
+
+typedef struct {
+     int linhas;
+     int colunas;
      Cor** imagem;
 }Matriz;
+void liberaImagem(Matriz* mat){
+    for (int i =0; i< mat->linhas; i++) {
+        free(mat->imagem[i]);
+    }
+    free(mat);
+}
 void executaComando(Comando* com, Matriz* mat){
 
+    if (strcmp(com->comando, "image") == 0) {
+        mat->imagem = (Cor**) calloc(com->parametros[0], sizeof(Cor*));
+        for (int i =0; i < com->parametros[0]; i++) {
+            mat->imagem[i] = calloc(com->parametros[1], sizeof(Cor));
+        }
+        for (int i = 0; i<mat->linhas; i++) {
+            for (int j =0; j<mat->colunas; j++) {
+                Cor cor;
+                cor.r = 255;
+                cor.g = 255;
+                cor.b = 255;
+                mat->imagem[i][j] = cor;
+            }
+        }
+    }
+
+}
+void passaMatriz(FILE* arq, Matriz* mat){
 
 }
 void escreveCabecalho(FILE* arq){
@@ -65,12 +104,18 @@ int main(){
     escreveCabecalho(saida);
     FILE* entrada = lerArquivo();
     Comando* com = lerComando(entrada);
-    while(com != NULL){
-       com = lerComando(entrada);
-       executaComando(com, matriz);
-       free(com);
+
+    while(1){
+        if (com == NULL) {
+            break;
+        }
+        executaComando(com, matriz);
+        free(com);
+        com = lerComando(entrada);
 
     }
+    free(com);
+    liberaImagem(matriz);
     fechaArquivo(entrada);
     fechaArquivo(saida);
 }
