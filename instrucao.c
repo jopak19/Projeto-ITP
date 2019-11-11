@@ -1,7 +1,7 @@
-#include "instrucao.h"
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
+#include "instrucao.h"
 
 
 void liberarInstrucao(Instrucao* instrucao){
@@ -35,7 +35,7 @@ int obterArgsQuantInstrucao(Instrucao instrucao){
 }
 
 void imprimirInstrucao(Instrucao instrucao){
-    printf("%s:", instrucao.comando);
+    printf("%s", instrucao.comando);
     for (int i = 0; i < instrucao.argsQuant; i++){
         printf(" %i", instrucao.args[i]);
     }
