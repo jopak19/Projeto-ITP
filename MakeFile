@@ -1,0 +1,9 @@
+all: main
+
+main: arquivo.o main.c
+	gcc main.c -o main arquivo.o
+
+arquivo.o: arquivo.c
+	gcc -c arquivo.c
+clean:
+	rm -f *.o
