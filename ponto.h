@@ -10,6 +10,6 @@ typedef struct {
 int getX(Ponto ponto);
 int getY(Ponto ponto);
 void setX(Ponto* ponto, int x);
-void setY(Ponto* ponto, int x);
+void setY(Ponto* ponto, int y);
 
 #endif

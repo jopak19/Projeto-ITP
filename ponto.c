@@ -13,6 +13,6 @@ void setX(Ponto* ponto, int x){
     (*ponto).coordenadaX = x;
 }
 
-void setY(Ponto* ponto, int x){
-    (*ponto).coordenadaX = x;
+void setY(Ponto* ponto, int y){
+    (*ponto).coordenadaY = y;
 }
