@@ -1,6 +1,13 @@
 #include "ponto.h"
 
 
+Ponto gerarPonto(int x, int y){
+    Ponto p;
+    p.coordenadaX = x;
+    p.coordenadaY = y;
+    return p;
+}
+
 int getX(Ponto ponto){
     return ponto.coordenadaX;
 }

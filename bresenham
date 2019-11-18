@@ -1,0 +1,86 @@
+void DrawLine(Vertex pixel1, Vertex pixel2, RGBA color1, RGBA color2){
+    int dx = pixel2.x - pixel1.x;
+    int dy = pixel2.y - pixel1.y;
+    int inclinacao=0;    
+    if(dx<0) // caso ponto final < ponto inicial
+    {
+        DrawLine(pixel2,pixel1,color2,color1);
+        return;
+    }
+    if(dy<0)
+        inclinacao = -1;
+    else
+        inclinacao = 1;
+
+    int incE, incNE, d;
+
+    Vertex pixel = pixel1;
+
+    PutPixel(pixel,color);
+    if(dx >= inclinacao*dy){    // m<=1
+        if(dy<0){ // caso y2<y1
+            d = 2*dy+dx;
+            while(pixel.x<pixel2.x){
+                if(d<0){ // escolhido é o I
+                    d += 2*(dy+dx);
+                    pixel.x++;
+                    pixel.y--;
+                }
+                else{ // escolhido é o S
+                    d+=2*dy;
+                    pixel.x++; // varia apenas no eixo x
+                }
+                PutPixel(pixel,color);
+            }
+        }
+        else{ // caso y1<y2
+            d=2*dy-dx;
+            while(pixel.x<pixel2.x){
+                if(d<0){ // escolhido é o I
+                    d+=2*dy;
+                    pixel.x++; // varia apenas no eixo x
+                }
+                else{ // escolhido é o S
+                    d+=2*(dy-dx);
+                    pixel.x++;
+                    pixel.y++;
+                }
+PutPixel(pixel,color);
+            }
+        }
+    }
+    else{ // |m|>1
+        if(dy<0){ // caso y2<y1 
+            d=dy+2*dx;
+            while(pixel.y > pixel2.y){
+                if(d<0){
+                    d += 2*dx;
+                    pixel.y--; // varia apenas no eixo y
+                }
+                else{
+                    d+=2*(dy+dx);
+                    pixel.x++;
+                    pixel.y--;
+                }
+PutPixel(pixel,color);
+            }
+        }
+        else{ // caso y1<y2
+            d=dy-2*dx;
+            while(pixel.y<pixel2.y){
+                if(d<0){
+                    d+=2*(dy-dx);
+                    pixel.x++;
+                    pixel.y++; 
+                }
+                else{
+                    d+=-2*dx;
+                    pixel.y++; // varia apenas no eixo y
+                }
+                PutPixel(pixel,color);
+                }
+            }
+        }
+    PutPixel(pixel2,color2);
+}
+

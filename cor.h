@@ -8,6 +8,6 @@ typedef struct{
     int blue;
 } Cor;
 
-Cor definirCor(int red, int green, int blue);
+Cor gerarCor(int red, int green, int blue);
 
 #endif

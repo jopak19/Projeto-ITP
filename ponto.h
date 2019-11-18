@@ -7,6 +7,7 @@ typedef struct {
     int coordenadaY;
 } Ponto;
 
+Ponto gerarPonto(int x, int y);
 int getX(Ponto ponto);
 int getY(Ponto ponto);
 void setX(Ponto* ponto, int x);
