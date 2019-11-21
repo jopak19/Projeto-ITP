@@ -15,6 +15,6 @@ void definirImagem(Imagem* imagem, int altura, int largura);
 void liberarImagem(Imagem* imagem);
 void desenharReta(Ponto ptnInicial, Ponto ptnFinal, Cor* cor, Imagem* img);
 void desenharPoligono(Imagem* Imagem, Cor* cor, Ponto* pontos, int qntPontos);
-void pintarPixel(Ponto p, Cor* cor, Imagem* imagem);
+int pintarPixel(Ponto p, Cor* cor, Imagem* imagem);
 
 #endif

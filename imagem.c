@@ -22,10 +22,12 @@ void liberarImagem(Imagem* imagem){
     imagem->largura = 0;
 }
 
-void pintarPixel(Ponto p, Cor* cor,Imagem* imagem){
+int pintarPixel(Ponto p, Cor* cor,Imagem* imagem){
+    if (getX(p) >= imagem->largura || getY(p) >= imagem->altura) return 0;
     imagem->matriz[p.coordenadaY][p.coordenadaX].red = cor->red;
     imagem->matriz[p.coordenadaY][p.coordenadaX].green = cor->green;
     imagem->matriz[p.coordenadaY][p.coordenadaX].blue = cor->blue;
+    return 1;
 }
 
 
