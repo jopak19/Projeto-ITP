@@ -31,10 +31,6 @@ int pintarPixel(Ponto p, Cor cor,Imagem* imagem){
 }
 
 
-/* A função a seguir 'desenharReta()' foi implementada baseada em um algorimo obtida em: 
-http://letslearnbits.blogspot.com/2014/10/icgt1-algoritmo-de-bresenham.html, o qual utiliza o
-algoritimo de bresenham.
-*/
 void desenharReta(Ponto ptnInicial, Ponto ptnFinal, Cor cor, Imagem* img){
     int dx = ptnFinal.coordenadaX - ptnInicial.coordenadaX;
     int dy = ptnFinal.coordenadaY - ptnInicial.coordenadaY;
@@ -175,43 +171,66 @@ void clear(Imagem* img, Cor cor){
 }
 
 void preencherFiguraRecursivo(Imagem* img, Cor tinta, Cor fundo, Ponto pnt){
+    // testa se o ponto está dentro da imagem;
     if (validarPonto(pnt, img->largura, img->altura)){
+        // testa se o ponto já foi pintado e se a tinta tem a mesma cor do fundo inicial;
         if(compararCor(img->matriz[getY(pnt)][getX(pnt)], fundo) && !compararCor(tinta, fundo)){
+            // pinta o pixel que atende aos requisitos;
             pintarPixel(pnt, tinta, img);
+            // chama a função para o pixel de cima;
             preencherFiguraRecursivo(img, tinta, fundo, gerarPonto(getX(pnt), getY(pnt) + 1));
+            // chama a função para o pixel de baixo;
             preencherFiguraRecursivo(img, tinta, fundo, gerarPonto(getX(pnt), getY(pnt) - 1));
+            // chama a função para o pixel da direita;
             preencherFiguraRecursivo(img, tinta, fundo, gerarPonto(getX(pnt) + 1, getY(pnt)));
+            // chama a função para o pixel da esquerda;
             preencherFiguraRecursivo(img, tinta, fundo, gerarPonto(getX(pnt) - 1, getY(pnt)));
         }
     }
 }
 
 void preencherFiguraInterativo(Imagem* img, Cor tinta, Cor fundo, Ponto pnt){
-    Ponto* pilha = (Ponto*) malloc(sizeof(Ponto));
+    // define a lista de pontos que vão passar pela função;
+    Ponto* lista;
+    // adiciona o primeiro ponto;
+    lista = (Ponto*) malloc(sizeof(Ponto));
     int tamanho = 1;
-    pilha[0] = pnt;
+    lista[0] = pnt;
+    // define uma variável para guardar o ponto atual;
     Ponto pntTemp;
+    // define uma variável para guardar o número de interações;
     int interacoes = 0;
     do{
+        // incrementa o número de interações em 1;
         interacoes += 1;
-        pntTemp = pilha[0];
+        // guarda o primeiro ponto da lista;
+        pntTemp = lista[0];
+        // testa se o primeiro ponto está dentro da imagem;
         if(validarPonto(pntTemp, img->largura, img->altura)){
+            // testa se o primeiro ponto já foi pintado e se a tinta tem a mesma cor do fundo inicial;
             if(compararCor(img->matriz[getY(pntTemp)][getX(pntTemp)], fundo) && !compararCor(tinta, fundo)){
+                // pinta o pixel do primeiro ponto;
                 pintarPixel(pntTemp, tinta, img);
+                // adiciona três pontos ao fim da lista;
                 tamanho += 3;
-                pilha = (Ponto*) realloc(pilha, tamanho * sizeof(Ponto));
-                pilha[tamanho - 3] = gerarPonto(getX(pntTemp), getY(pntTemp) + 1);
-                pilha[tamanho - 2] = gerarPonto(getX(pntTemp), getY(pntTemp) - 1);
-                pilha[tamanho - 1] = gerarPonto(getX(pntTemp) - 1, getY(pntTemp));
-                pilha[0] = gerarPonto(getX(pntTemp) + 1, getY(pntTemp));
-            } else goto erro;
+                lista = (Ponto*) realloc(lista, tamanho * sizeof(Ponto));
+                lista[tamanho - 3] = gerarPonto(getX(pntTemp), getY(pntTemp) + 1);
+                lista[tamanho - 2] = gerarPonto(getX(pntTemp), getY(pntTemp) - 1);
+                lista[tamanho - 1] = gerarPonto(getX(pntTemp) - 1, getY(pntTemp));
+                // adiciona um ponto na primeira posição da lista;
+                lista[0] = gerarPonto(getX(pntTemp) + 1, getY(pntTemp));
+            } else goto erro; // caso não atenda aos requisitos vá para 'erro:'
         } else{
+            // em caso de erro;
             erro:
-            pilha[0] = pilha[tamanho - 1];
+            // move o último ponto para a primeira posição da lista;
+            lista[0] = lista[tamanho - 1];
             tamanho -= 1;
-            pilha = (Ponto*) realloc(pilha, tamanho * sizeof(Ponto));
+            lista = (Ponto*) realloc(lista, tamanho * sizeof(Ponto));
         }
+        // repete enquanto a lista tiver elementos;
     } while (tamanho > 0);
     printf("Interações: %d\n", interacoes);
-    free(pilha);
+    // libera a lista;
+    free(lista);
 }
