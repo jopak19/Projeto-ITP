@@ -1,6 +1,15 @@
-image 225 300
+image 400 200
+color 0 255 0
+fill 0 0
+color 255 255 0
+polygon 200 0 399 100 200 200 0 100
+fill 100 100
 color 0 0 255
-line 110 0 110 50
-polygon 110 50 60 150 110 250 160 150
-line 110 250 110 299
+circle 200 100 80
+fill 200 100
+color 255 255 255
+line 120 100 280 100
 save imagem.ppm
+
+função 'fill' recursiva tem máximo de 401x261
+função 'fill' interativa máximo não testado! (passa de 1000x1000)

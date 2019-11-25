@@ -1,0 +1,85 @@
+#include <stdio.h>
+#include <math.h>
+
+// Center of the cicle = (15, 15)
+int xc = 15, yc = 15;
+
+const int linhas = 30;
+const int colunas = 30;
+char desenho[30][30];
+
+void plot_pixel(int x, int y){
+  desenho[y][x]='*';
+  //printf("%d %d\n",y,x);
+
+}
+
+// Plot eight points using circle's symmetrical property
+void plot_point(int x, int y)
+{
+  plot_pixel(xc+x, yc+y);
+  plot_pixel(xc+x, yc-y);
+  plot_pixel(xc+y, yc+x);
+  plot_pixel(xc+y, yc-x);
+  plot_pixel(xc-x, yc-y);
+  plot_pixel(xc-y, yc-x);
+  plot_pixel(xc-x, yc+y);
+  plot_pixel(xc-y, yc+x);
+}
+
+// Function to draw a circle using bresenham's
+// circle drawing algorithm
+void bresenham_circle(int r)
+{
+  int x=0,y=r;
+  float pk=(5.0/4.0)-r;
+
+  /* Plot the points */
+  /* Plot the first point */
+  plot_point(x,y);
+  int k;
+  /* Find all vertices till x=y */
+  while(x < y)
+  {
+    x = x + 1;
+    if(pk < 0)
+      pk = pk + 2*x+1;
+    else
+    {
+      y = y - 1;
+      pk = pk + 2*(x - y) + 1;
+    }
+    plot_point(x,y);
+  }
+}
+
+
+int main(int argc, char **argv)
+{
+  // preenche a matriz desenho com .
+  // so para garantir o conteudo
+  for (int i = 0; i < linhas; ++i){
+    for (int j = 0; j < colunas; ++j){
+      desenho[i][j]='.';
+    }
+  }
+
+  bresenham_circle(8);
+  bresenham_circle(12);
+
+  // imprime o resultado
+  for (int i = 0; i < linhas; ++i){
+    for (int j = 0; j < colunas; ++j){
+      if (desenho[i][j]=='*'){ // se o pixel tiver * faz parte da reta
+        printf("\u2588 "); // imprimi um quadrado no local do *
+      } else {
+        // imprime o bloco potilhado
+        // printf("\u2591");
+        printf("%c ", desenho[i][j]);
+      }
+    }
+    printf("\n");
+  }
+
+  return 0;
+}

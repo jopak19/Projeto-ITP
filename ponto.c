@@ -8,6 +8,13 @@ Ponto gerarPonto(int x, int y){
     return p;
 }
 
+int validarPonto(Ponto ponto, int largura, int altura){
+    if((getX(ponto) >= largura || getX(ponto) < 0) || (getY(ponto) >= altura || getY(ponto) < 0)){
+        return 0;
+    }
+    return 1;
+}
+
 int getX(Ponto ponto){
     return ponto.coordenadaX;
 }

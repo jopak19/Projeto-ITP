@@ -9,5 +9,6 @@ typedef struct{
 } Cor;
 
 Cor gerarCor(int red, int green, int blue);
+int compararCor(Cor c1, Cor c2);
 
 #endif

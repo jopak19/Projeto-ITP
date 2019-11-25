@@ -1,0 +1,4 @@
+open imagem.ppm
+line 100 100 50 50
+circle 200 100 50
+save imagem2.ppm
