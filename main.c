@@ -4,7 +4,7 @@
 #include "arquivo.h"
 #include "ponto.h"
 #include "cor.h"
-#define MAX 20
+#define MAX 50
 
 
 int main(){
@@ -16,27 +16,70 @@ int main(){
     Ponto* pontos;
     int qntPontos;
     char nome[MAX];
+    int modo;
+    char* linhaArquivo;
+    char linhaTerminal[MAX];
 
     // simula a palheta;
     base = gerarCor(0, 0, 0);
 
-    // recebe uma string;
-    fgets(nome, MAX, stdin);
-    // retira o '\n', se tiver;
-    if (nome[strlen(nome) - 1] == '\n') nome[strlen(nome) - 1] = '\0';
-    setbuf(stdin, NULL);
+    do{
+        printf("Escolha um dos modos:\n");
+        printf("1) Ler um arquivo de instruções.\n");
+        printf("2) Ler instruções pelo terminal.\n");
+        printf("3) Cancelar\n");
 
-    // tenta abrir o arquivo;
-    if (!abrirArquivo(&entrada, nome, "r")){
-        printf("Erro ao abrir arquivo!\n");
-        return 0;
-    }
+        scanf("%i", &modo);
+        setbuf(stdin, NULL);
+
+        switch (modo){
+        case 1:
+            printf("Digite o nome do arquivo:\n");
+            // recebe uma string;
+            fgets(nome, MAX, stdin);
+            // retira o '\n', se tiver;
+            if (nome[strlen(nome) - 1] == '\n') nome[strlen(nome) - 1] = '\0';
+            setbuf(stdin, NULL);
+
+            // tenta abrir o arquivo;
+            if (!abrirArquivo(&entrada, nome, "r")){
+                printf("Erro ao abrir arquivo!\n\n");
+                modo = -1;
+            }
+            break;
+        
+        case 2:
+            printf("Digite as instruções:\n");
+            break;
+        
+        case 3:
+            return 0;
+            break;
+        
+        default:
+            break;
+        }
+    }while(modo > 3 || modo < 1);
 
     // define uma imagem vazia;
     definirImagem(&imagem, 0, 0);
 
-    // ler cada instrucao;
-    while(lerInstrucao(entrada, &instrucao)){
+    // lê cada instrucao;
+    while(1){
+        if (modo == 1){
+            linhaArquivo = lerLinha(entrada);
+            if (!definirInstrucao(&instrucao, linhaArquivo)){
+                free(linhaArquivo);
+                fecharArquivo(&entrada);
+                break;
+            }
+            free(linhaArquivo);
+        } else if (modo == 2){
+            fgets(linhaTerminal, MAX, stdin);
+            if (linhaTerminal[strlen(linhaTerminal) - 1] == '\n') linhaTerminal[strlen(linhaTerminal) - 1] = '\0';
+            setbuf(stdin, NULL);
+            if (!definirInstrucao(&instrucao, linhaTerminal)) break;
+        }
         imprimirInstrucao(instrucao);
         switch (obterCodigoInstrucao(instrucao)){
         case IMAGE:
@@ -107,6 +150,5 @@ int main(){
         liberarInstrucao(&instrucao);
     }
     liberarImagem(&imagem);
-    fecharArquivo(&entrada);
     return 0;
 }

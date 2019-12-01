@@ -27,7 +27,7 @@ void escreverImagem(Arquivo* arquivo, Imagem img){
 }
 
 char* lerLinha(Arquivo arquivo){
-    char* linha = (char*) malloc(0);
+    char* linha = (char*) malloc(sizeof(char));
     int tamanho = 1;
     char letra = fgetc(arquivo.canal);
     if(letra == EOF) return NULL;
