@@ -11,6 +11,7 @@ int main(){
     Instrucao instrucao;
     Arquivo entrada;
     Arquivo saida;
+    Arquivo help;
     Imagem imagem;
     Cor base;
     Ponto* pontos;
@@ -49,7 +50,7 @@ int main(){
             break;
         
         case 2:
-            printf("Digite as instruções:\n");
+            printf("Digite as instruções ('help' para mais informações):\n");
             break;
         
         case 3:
@@ -64,10 +65,11 @@ int main(){
     // define uma imagem vazia;
     definirImagem(&imagem, 0, 0);
 
-    // lê cada instrucao;
     while(1){
         if (modo == 1){
+            // lê uma linha do arquivo de entrada;
             linhaArquivo = lerLinha(entrada);
+            // tenta transformar em uma instrução;
             if (!definirInstrucao(&instrucao, linhaArquivo)){
                 free(linhaArquivo);
                 fecharArquivo(&entrada);
@@ -75,12 +77,16 @@ int main(){
             }
             free(linhaArquivo);
         } else if (modo == 2){
+            // lê uma linha do terminal;
             fgets(linhaTerminal, MAX, stdin);
+            // retira o '\n' se tiver;
             if (linhaTerminal[strlen(linhaTerminal) - 1] == '\n') linhaTerminal[strlen(linhaTerminal) - 1] = '\0';
             setbuf(stdin, NULL);
+            // tenta transformar em instrução;
             if (!definirInstrucao(&instrucao, linhaTerminal)) break;
         }
-        imprimirInstrucao(instrucao);
+        // exibe a instrução se tiver no modo de leitura por arquivo;
+        if (modo == 1) imprimirInstrucao(instrucao);
         switch (obterCodigoInstrucao(instrucao)){
         case IMAGE:
             // libera a imagem anterior;
@@ -143,6 +149,40 @@ int main(){
         case FILL:
             preencherFiguraRecursivo(&imagem, base, imagem.matriz[atoi(instrucao.args[1])][atoi(instrucao.args[0])],
                                      gerarPonto(atoi(instrucao.args[0]), atoi(instrucao.args[1])));
+            break;
+
+        case RECT:
+            // gera quatro pontos apartir das informações do ponto inicial, largura e altura;
+            pontos = (Ponto*) malloc(4 * sizeof(Ponto));
+            qntPontos = 4;
+            pontos[0] = gerarPonto(atoi(instrucao.args[0]), atoi(instrucao.args[1]));
+            pontos[1] = gerarPonto(atoi(instrucao.args[0]) + atoi(instrucao.args[2]), atoi(instrucao.args[1]));
+            pontos[2] = gerarPonto(atoi(instrucao.args[0]) + atoi(instrucao.args[2]),
+                                   atoi(instrucao.args[1]) + atoi(instrucao.args[3]));
+            pontos[3] = gerarPonto(atoi(instrucao.args[0]), atoi(instrucao.args[1]) + atoi(instrucao.args[3]));
+            desenharPoligono(&imagem, base, pontos, qntPontos);
+            free(pontos);
+            break;
+        
+        case HELP:
+            // abre o arquivo de ajuda;
+            abrirArquivo(&help, "help.txt", "r");
+            while(1){
+                linhaArquivo = lerLinha(help);
+                // para de repetir quando não tiver linha;
+                if(strlen(linhaArquivo) == 0){
+                    free(linhaArquivo);
+                    break;
+                }
+                if(instrucao.qntArgs != 0){
+                    if (strncmp(instrucao.args[0], linhaArquivo, strlen(instrucao.args[0])) == 0){
+                       printf("%s\n", linhaArquivo);
+                    }
+                } else printf("%s\n", linhaArquivo);
+                free(linhaArquivo);
+            }
+            fecharArquivo(&help);
+            break;
 
         default:
             break;

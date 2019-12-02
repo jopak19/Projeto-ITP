@@ -1,0 +1,11 @@
+help - exibe as informações sobre os comandos;
+image <largura> <altura> - cria uma imagem;
+color <red> <green> <blue> - muda a cor principal;
+clean <red> <green> <blue> - preenche toda a tela com uma cor;
+line <x1> <y1> <x2> <y2> - desenha uma linha na imagem;
+rect <x> <y> <largura> <altura> - desenha um retangulo na imagem;
+circle <x> <y> <raio> - desenha um circulo na imagem;
+polygon <x1> <y1> <x2> <y2> ... <xn> <yn> - desenha um poligono na imagem;
+fill <x> <y> - preenche uma figura com a cor principal;
+save <nome.ppm> - salva a imagem em um arquivo;
+open <nome.ppm> - carrega uma imagem de um arquivo ppm;

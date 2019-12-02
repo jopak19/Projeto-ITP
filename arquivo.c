@@ -30,11 +30,12 @@ char* lerLinha(Arquivo arquivo){
     char* linha = (char*) malloc(sizeof(char));
     int tamanho = 1;
     char letra = fgetc(arquivo.canal);
-    if(letra == EOF) return NULL;
-    while(letra != EOF && letra != '\n'){
-        linha = (char*) realloc(linha, ++tamanho * sizeof(char));
-        linha[tamanho - 2] = letra;
-        letra = fgetc(arquivo.canal);
+    if(letra != EOF){
+        while(letra != EOF && letra != '\n'){
+            linha = (char*) realloc(linha, ++tamanho * sizeof(char));
+            linha[tamanho - 2] = letra;
+            letra = fgetc(arquivo.canal);
+        }
     }
     linha[tamanho - 1] = '\0';
     return linha;

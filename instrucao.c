@@ -52,7 +52,7 @@ int obterCodigoInstrucao(Instrucao instrucao){
     } else if(strncmp(instrucao.comando, "clear", 5) == 0){
         return CLEAR;
     } else if(strncmp(instrucao.comando, "rect", 4) == 0){
-        return REACT;
+        return RECT;
     } else if(strncmp(instrucao.comando, "circle", 6) == 0){
         return CIRCLE;
     } else if(strncmp(instrucao.comando, "polygon", 7) == 0){
@@ -65,8 +65,8 @@ int obterCodigoInstrucao(Instrucao instrucao){
         return OPEN;
     } else if(strncmp(instrucao.comando, "line", 5) == 0){
         return LINE;
-    } else if(strncmp(instrucao.comando, "primitiva", 9) == 0){
-        return PRIMITIVA;
+    } else if(strncmp(instrucao.comando, "help", 9) == 0){
+        return HELP;
     } else{
         return ERROR;
     }  

@@ -13,12 +13,12 @@ typedef struct{
 
 enum CodigoInstrucao{
     ERROR = -1,
-    PRIMITIVA,
+    HELP,
     IMAGE,
     COLOR,
     CLEAR,
     LINE,
-    REACT,
+    RECT,
     CIRCLE,
     POLYGON,
     FILL,
